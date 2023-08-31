@@ -62,7 +62,7 @@ public class day05_CssSelector {
         String message= driver.findElement(By.xpath("(//span)[1]")).getText();
 
 
-        System.out.println(message.equals("The payment was successfully submitted.")?"Test PASSED" : "Test  FAILD");
+        System.out.println(message.equals("The payment was successfully submitted.")?"Test PASSED" : "Test  FAILED");
 
         driver.close();
 
