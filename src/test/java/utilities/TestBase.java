@@ -27,7 +27,7 @@ public abstract class TestBase {
     @After
     public void tearDown() throws Exception {
         Thread.sleep(3000);
-        driver.close();
+        driver.quit();
     }
 
     // HARD WAIT
@@ -64,6 +64,16 @@ public abstract class TestBase {
         WebElement element= driver.findElement(By.cssSelector(id));
         return element;
     }
+
+    public String selectWindow(int index){
+        String window=driver.getWindowHandles().toArray()[index].toString();
+        return window;
+    }
+
+    public void swicthWindow(int index){
+        driver.switchTo().window(driver.getWindowHandles().toArray()[index].toString());
+    }
+
 
 
 }
