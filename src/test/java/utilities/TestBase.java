@@ -9,6 +9,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
+import java.security.Key;
 import java.time.Duration;
 
 public abstract class TestBase {
@@ -72,6 +76,32 @@ public abstract class TestBase {
 
     public void swicthWindow(int index){
         driver.switchTo().window(driver.getWindowHandles().toArray()[index].toString());
+    }
+
+    //UploadFile Robot class
+
+    public void uploadFilePats(String fielPath){
+
+        try {
+            wait(3);
+            StringSelection stringSelection=new StringSelection(fielPath);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection,null);
+            Robot robot=new Robot();
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            wait(3);
+            robot.keyPress(KeyEvent.VK_V);
+            wait(3);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            wait(3);
+            robot.keyPress(KeyEvent.VK_V);
+            wait(3);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            wait(3);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            wait(3);
+        }catch (AWTException e){
+            throw new RuntimeException(e);
+        }
     }
 
 
