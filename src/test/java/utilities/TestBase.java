@@ -1,10 +1,9 @@
 package utilities;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
@@ -12,6 +11,8 @@ import org.openqa.selenium.support.ui.Select;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.security.Key;
 import java.time.Duration;
 
@@ -102,6 +103,16 @@ public abstract class TestBase {
         }catch (AWTException e){
             throw new RuntimeException(e);
         }
+    }
+
+    // ScreenShot
+    public void screenshot(String fileName) throws IOException {
+        String folderPath="src/test/java/utilities/ScreenShots/";
+
+
+        TakesScreenshot ts= (TakesScreenshot) driver;
+
+        FileUtils.copyFile(ts.getScreenshotAs(OutputType.FILE),new File(folderPath+fileName));
     }
 
 
