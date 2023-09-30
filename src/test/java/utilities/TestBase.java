@@ -14,7 +14,9 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.security.Key;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 
 public abstract class TestBase {
     public WebDriver driver;
@@ -113,6 +115,27 @@ public abstract class TestBase {
         TakesScreenshot ts= (TakesScreenshot) driver;
 
         FileUtils.copyFile(ts.getScreenshotAs(OutputType.FILE),new File(folderPath+fileName));
+    }
+
+    public void takeScreenshot()  {
+        String date= new SimpleDateFormat("_hhmm_ss_ddMMyyyy").format(new Date());
+        String savingPath= "src/test/java/utilities/ScreenShots/screenshot%S.png";
+        TakesScreenshot ts=(TakesScreenshot) driver;
+        try {
+            FileUtils.copyFile(ts.getScreenshotAs(OutputType.FILE),new File(String.format(savingPath,date)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void takeElementShot(WebElement element){
+        String date= new SimpleDateFormat("_hhmm_ss_ddMMyyyy").format(new Date());
+        String savingPath= "src/test/java/utilities/ScreenShots/screenshot%S.png";
+        try {
+            FileUtils.copyFile(element.getScreenshotAs(OutputType.FILE),new File(String.format(savingPath,date)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
