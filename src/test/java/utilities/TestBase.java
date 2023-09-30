@@ -1,5 +1,8 @@
 package utilities;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -16,10 +19,16 @@ import java.io.IOException;
 import java.security.Key;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public abstract class TestBase {
     public WebDriver driver;
+    public ExtentReports extentReports;
+    public ExtentHtmlReporter extentHtmlReporter;
+    public ExtentTest extentTest;
+
     @Before
     public void setUp() throws Exception {
         System.setProperty("webdriver.chrome.driver","C:\\Users\\ylmzo\\IdeaProjects\\Dokunulmaz dosyalar\\chromedriver-win64\\chromedriver.exe");
@@ -29,12 +38,16 @@ public abstract class TestBase {
         driver=new ChromeDriver(co);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+
+
     }
 
     @After
     public void tearDown() throws Exception {
         Thread.sleep(3000);
         driver.quit();
+
+        extentReports.flush();
     }
 
     // HARD WAIT
@@ -136,6 +149,32 @@ public abstract class TestBase {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void createReportFile(String fileName){
+        extentReports=new ExtentReports();
+
+        String ddt= LocalDateTime.now().format(DateTimeFormatter.ofPattern("_dd-MM-yyyy_hh-mm-ss")).toString();
+        String filePath=String.format("src/test/java/utilities/ExtentReport/%s_%s.html",ddt,fileName);
+        extentHtmlReporter=new ExtentHtmlReporter(filePath);
+
+        extentReports.attachReporter(extentHtmlReporter);
+    }
+
+    public void report(String testerName, String browser, String docTitle,String reportName){
+        extentReports.setSystemInfo("Tester", testerName);
+        extentReports.setSystemInfo("Browser", browser);
+        extentHtmlReporter.config().setDocumentTitle(docTitle);
+        extentHtmlReporter.config().setReportName(reportName);
+    }
+
+    public void createTest(String testName, String description){
+        extentTest=extentReports.createTest(testName,description);
+    }
+
+    public void printData(int tableOrder ,int row, int column) {
+        WebElement element=findElementByXpath(String.format("(//table)[%s]//tr[%s]//td[%s]",tableOrder,row,column));
+        System.out.println(element.getText());
     }
 
 
